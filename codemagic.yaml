@@ -1,0 +1,19 @@
+workflows:
+  ios-release:
+    name: iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      xcode: latest
+    scripts:
+      - name: Install CocoaPods
+        script: |
+          cd iosApp
+          pod install
+      - name: Build IPA
+        script: |
+          # Use xcodebuild to generate the archive and IPA
+          xcodebuild build -workspace iosApp.xcworkspace -scheme iosApp -destination 'generic/platform=iOS' -archivePath build/iosApp.xcarchive archive
+          xcodebuild -exportArchive -archivePath build/iosApp.xcarchive -exportPath build/output -exportOptionsPlist exportOptions.plist
+    artifacts:
+      - build/output/*.ipa
