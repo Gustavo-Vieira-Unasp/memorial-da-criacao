@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+@file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -7,22 +7,17 @@ plugins {
 }
 
 kotlin {
-    js {
-        browser()
-        binaries.executable()
-    }
-
-    @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
         binaries.executable()
     }
-
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.shared)
-
-            implementation(libs.compose.ui)
+            implementation(project(":shared"))
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.components.resources)
         }
     }
 }
